@@ -8,9 +8,16 @@ class Login extends React.Component {
     isButtonDisabled: true,
   };
 
+  validateFormInputs = ({ email, senha } = this.state) => {
+    const minimumPasswordLength = 5;
+    const isValidEmail = /\S+@\S+\.\S+/.test(email);
+    return !isValidEmail || senha.length < minimumPasswordLength;
+  };
+
   handleChange = ({ target: { name, value } }) => {
     this.setState({
       [name]: value,
+      isButtonDisabled: this.validateFormInputs(),
     });
   };
 
