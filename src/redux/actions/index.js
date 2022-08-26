@@ -19,6 +19,5 @@ function actionTypeCurrencies(payload) {
 
 export const getCurrenciesThunk = () => async (dispatch) => {
   const apiResponse = await getCurrencies();
-  console.log(apiResponse);
   dispatch(actionTypeCurrencies(apiResponse));
 };
