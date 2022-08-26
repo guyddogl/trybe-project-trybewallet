@@ -1,4 +1,4 @@
-import { SAVE_WALLET } from '../actions';
+import { GET_CURRENCIES } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [], // array de string
@@ -7,16 +7,16 @@ const INITIAL_STATE = {
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
 };
 
-function walletReducer(state = INITIAL_STATE, action) {
+function wallet(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case SAVE_WALLET:
+  case GET_CURRENCIES:
     return {
       ...state,
-      state: action.state,
+      currencies: Object.keys(action.payload).filter((currency) => currency !== 'USDT'),
     };
   default:
     return state;
   }
 }
 
-export default walletReducer;
+export default wallet;
