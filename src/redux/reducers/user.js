@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   email: '', // string que armazena o email da pessoa usuária
 };
 
-function userReducer(state = INITIAL_STATE, action) {
+function user(state = INITIAL_STATE, action) {
   switch (action.type) {
   case SAVE_USER:
     return {
@@ -16,4 +16,4 @@ function userReducer(state = INITIAL_STATE, action) {
   }
 }
 
-export default userReducer;
+export default user;
