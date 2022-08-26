@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import wallet from '../assets/img/wallet.png';
 
 class Login extends React.Component {
@@ -21,8 +22,10 @@ class Login extends React.Component {
     });
   };
 
-  handleSubmit = () => {
-    console.log('Entrou');
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { history } = this.props;
+    history.push('/carteira');
   };
 
   render() {
@@ -75,5 +78,11 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Login;
