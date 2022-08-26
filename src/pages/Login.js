@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { saveUser } from '../redux/actions';
 import wallet from '../assets/img/wallet.png';
 
 class Login extends React.Component {
@@ -24,6 +26,9 @@ class Login extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    const { dispatch } = this.props;
+    const { email } = this.state;
+    dispatch(saveUser(email));
     const { history } = this.props;
     history.push('/carteira');
   };
@@ -83,6 +88,7 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default connect()(Login);
