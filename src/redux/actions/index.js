@@ -1,5 +1,7 @@
+import getCurrencies from '../../services';
+
 export const SAVE_USER = 'SAVE_USER';
-export const SAVE_WALLET = 'ADD_PROFESSIONAL';
+export const GET_CURRENCIES = 'GET_CURRENCIES';
 
 export function saveUser(payload) {
   return {
@@ -8,9 +10,15 @@ export function saveUser(payload) {
   };
 }
 
-export function saveWallet(payload) {
+function actionTypeCurrencies(payload) {
   return {
-    type: SAVE_WALLET,
+    type: GET_CURRENCIES,
     payload,
   };
 }
+
+export const getCurrenciesThunk = () => async (dispatch) => {
+  const apiResponse = await getCurrencies();
+  console.log(apiResponse);
+  dispatch(actionTypeCurrencies(apiResponse));
+};
