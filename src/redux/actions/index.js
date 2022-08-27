@@ -5,19 +5,9 @@ export const GET_CURRENCIES = 'GET_CURRENCIES';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
-export function actionSaveUser(payload) {
-  return {
-    type: SAVE_USER,
-    payload,
-  };
-}
+export const actionSaveUser = (payload) => ({ type: SAVE_USER, payload });
 
-function actionGetCurrencies(payload) {
-  return {
-    type: GET_CURRENCIES,
-    payload,
-  };
-}
+const actionGetCurrencies = (payload) => ({ type: GET_CURRENCIES, payload });
 
 export const getCurrenciesThunk = () => async (dispatch) => {
   const apiResponse = await getCurrencies();
