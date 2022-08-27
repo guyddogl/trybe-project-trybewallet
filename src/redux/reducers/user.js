@@ -1,7 +1,7 @@
 import { SAVE_USER } from '../actions';
 
 const INITIAL_STATE = {
-  email: '', // string que armazena o email da pessoa usuária
+  email: '',
 };
 
 function user(state = INITIAL_STATE, action) {
