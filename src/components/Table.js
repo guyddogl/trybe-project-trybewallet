@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { actionDeleteExpense } from '../redux/actions';
 
 class Table extends Component {
+  deleteExpense = ({ target }) => {
+    const { expenses, dispatch } = this.props;
+    const filterExpense = expenses.filter((expense) => expense.id !== Number(target.id));
+    dispatch(actionDeleteExpense(filterExpense));
+  };
+
   render() {
     const { expenses } = this.props;
     return (
       <div className="table-responsive">
         <table
-          className="table table-sm table-hover table-bordered"
+          className="table table-sm table-hover table-bordered align-middle"
           style={ { background: 'white' } }
         >
-          <thead className="table-primary text-center">
+          <thead className="table-success text-center">
             <tr>
               <th scope="col">Descrição</th>
               <th scope="col">Tag</th>
@@ -37,7 +44,18 @@ class Table extends Component {
                   <td>{askValue.toFixed(2)}</td>
                   <td>{(expense.value * Number(askValue)).toFixed(2)}</td>
                   <td>Real</td>
-                  <td>Editar/Excluir</td>
+                  <td className="text-center">
+                    <button
+                      type="button"
+                      id={ expense.id }
+                      className="btn btn-sm btn-danger"
+                      data-testid="delete-btn"
+                      onClick={ this.deleteExpense }
+                    >
+                      <i className="fa-regular fa-trash-can me-2" />
+                      Excluir
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -54,6 +72,7 @@ const mapStateToProps = (state) => ({
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(Table);
