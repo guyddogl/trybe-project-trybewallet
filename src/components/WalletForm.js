@@ -52,9 +52,9 @@ class WalletForm extends Component {
     const { currencies } = this.props;
 
     return (
-      <section className="container mt-3">
+      <section className="container my-5">
         <div className="row justify-content-center align-items-center">
-          <label htmlFor="value" className="col-lg-2 form-label my-2">
+          <label htmlFor="value" className="col-4 col-lg-2 form-label my-2">
             Valor
             <input
               type="text"
@@ -66,7 +66,7 @@ class WalletForm extends Component {
               data-testid="value-input"
             />
           </label>
-          <label htmlFor="description" className="col-lg-2 form-label my-2">
+          <label htmlFor="description" className="col-8 col-lg-2 form-label my-2">
             Descrição
             <input
               type="text"
@@ -78,7 +78,7 @@ class WalletForm extends Component {
               data-testid="description-input"
             />
           </label>
-          <label htmlFor="currency" className="col-lg-2 form-label my-2">
+          <label htmlFor="currency" className="col-4 col-lg-2 form-label my-2">
             Moeda
             <select
               className="form-select"
@@ -92,7 +92,7 @@ class WalletForm extends Component {
               ))}
             </select>
           </label>
-          <label htmlFor="method" className="col-lg-2 form-label my-2">
+          <label htmlFor="method" className="col-8 col-lg-2 form-label my-2">
             Forma de pagamento
             <select
               className="form-select"
@@ -106,7 +106,7 @@ class WalletForm extends Component {
               <option value="Cartão de débito">Cartão de débito</option>
             </select>
           </label>
-          <label htmlFor="method" className="col-lg-2 form-label my-2">
+          <label htmlFor="method" className="col-6 col-lg-2 form-label my-2">
             Categoria
             <select
               className="form-select"
@@ -122,7 +122,7 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <div className="col-lg-2">
+          <div className="col-6 col-lg-2 text-center">
             <button
               type="button"
               className="btn btn-md btn-primary mt-4"

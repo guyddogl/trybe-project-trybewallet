@@ -9,7 +9,11 @@ class Wallet extends React.Component {
       <>
         <Header />
         <WalletForm />
-        <Table />
+        <section className="container">
+          <div className="row justify-content-center align-items-center">
+            <Table />
+          </div>
+        </section>
       </>
     );
   }
