@@ -2,20 +2,45 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCurrenciesThunk } from '../redux/actions';
+import getCurrencies from '../services';
 
 class WalletForm extends Component {
   state = {
-    despesa: '',
+    valorDaDespesa: '',
     description: '',
-    currencySelected: '',
-    paymentMethodSelected,
-    expenseCategorySelected,
+    currencySelected: 'USD',
+    paymentMethodSelected: 'Dinheiro',
+    expenseCategorySelected: 'Alimentação',
+    exchangeRates: {},
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(getCurrenciesThunk());
   }
+
+  handleSaveExpense = async () => {
+    const currencies = await getCurrencies();
+    this.setState({ exchangeRates: currencies });
+    const {
+      valorDaDespesa,
+      description,
+      currencySelected,
+      paymentMethodSelected,
+      expenseCategorySelected,
+      exchangeRates,
+    } = this.state;
+    const newExpense = {
+      id: 0,
+      value: valorDaDespesa,
+      description,
+      currency: currencySelected,
+      paymentMethod: paymentMethodSelected,
+      expenseCategory: expenseCategorySelected,
+      exchangeRates,
+    };
+    console.log(newExpense);
+  };
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({
@@ -25,7 +50,7 @@ class WalletForm extends Component {
 
   render() {
     const {
-      despesa,
+      valorDaDespesa,
       description,
       currencySelected,
       paymentMethodSelected,
@@ -39,10 +64,10 @@ class WalletForm extends Component {
         <div className="row justify-content-center align-items-center">
           <input
             type="text"
-            name="despesa"
-            value={ despesa }
-            placeholder="Despesa"
-            className="form-control my-3"
+            name="valorDaDespesa"
+            value={ valorDaDespesa }
+            placeholder="Valor da despesa"
+            className="form-control my-2"
             onChange={ this.handleChange }
             data-testid="value-input"
           />
@@ -51,12 +76,12 @@ class WalletForm extends Component {
             name="description"
             value={ description }
             placeholder="Descrição"
-            className="form-control my-3"
+            className="form-control my-2"
             onChange={ this.handleChange }
             data-testid="description-input"
           />
           <select
-            className="form-select"
+            className="form-select my-2"
             name="currencySelected"
             value={ currencySelected }
             onChange={ this.handleChange }
@@ -67,7 +92,7 @@ class WalletForm extends Component {
             ))}
           </select>
           <select
-            className="form-select"
+            className="form-select my-2"
             name="paymentMethodSelected"
             value={ paymentMethodSelected }
             onChange={ this.handleChange }
@@ -78,7 +103,7 @@ class WalletForm extends Component {
             <option value="Cartão de débito">Cartão de débito</option>
           </select>
           <select
-            className="form-select"
+            className="form-select my-2"
             name="expenseCategorySelected"
             value={ expenseCategorySelected }
             onChange={ this.handleChange }
@@ -90,6 +115,13 @@ class WalletForm extends Component {
             <option value="Transporte">Transporte</option>
             <option value="Saúde">Saúde</option>
           </select>
+          <button
+            type="button"
+            className="btn btn-md btn-primary my-3"
+            onClick={ this.handleSaveExpense }
+          >
+            Adicionar despesa
+          </button>
         </div>
       </section>
     );
