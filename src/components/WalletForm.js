@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrenciesThunk } from '../redux/actions';
+import { getCurrenciesThunk, actionAddExpense } from '../redux/actions';
 import getCurrencies from '../services';
 
 class WalletForm extends Component {
   state = {
+    id: 0,
     valorDaDespesa: '',
     description: '',
     currencySelected: 'USD',
@@ -21,25 +22,12 @@ class WalletForm extends Component {
 
   handleSaveExpense = async () => {
     const currencies = await getCurrencies();
-    this.setState({ exchangeRates: currencies });
-    const {
-      valorDaDespesa,
-      description,
-      currencySelected,
-      paymentMethodSelected,
-      expenseCategorySelected,
-      exchangeRates,
-    } = this.state;
-    const newExpense = {
-      id: 0,
-      value: valorDaDespesa,
-      description,
-      currency: currencySelected,
-      paymentMethod: paymentMethodSelected,
-      expenseCategory: expenseCategorySelected,
-      exchangeRates,
-    };
-    console.log(newExpense);
+    const { dispatch, idExpense } = this.props;
+    this.setState({
+      id: idExpense.length > 0 ? idExpense.length : 0,
+      exchangeRates: currencies,
+    });
+    dispatch(actionAddExpense(this.state));
   };
 
   handleChange = ({ target: { name, value } }) => {
@@ -130,10 +118,12 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  idExpense: state.wallet.expenses,
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  idExpense: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
