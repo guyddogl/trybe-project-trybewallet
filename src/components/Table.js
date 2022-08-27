@@ -57,7 +57,7 @@ class Table extends Component {
                       data-testid="edit-btn"
                       onClick={ this.editExpense }
                     >
-                      <i className="fa-regular fa-trash-can me-2" />
+                      <i className="fa-regular fa-edit me-2" />
                       Editar despesa
                     </button>
                     <button
