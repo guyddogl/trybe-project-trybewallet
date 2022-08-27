@@ -8,6 +8,8 @@ class WalletForm extends Component {
     despesa: '',
     description: '',
     currencySelected: '',
+    paymentMethodSelected,
+    expenseCategorySelected,
   };
 
   componentDidMount() {
