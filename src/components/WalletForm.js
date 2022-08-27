@@ -7,11 +7,11 @@ import getCurrencies from '../services';
 class WalletForm extends Component {
   state = {
     id: 0,
-    valorDaDespesa: '',
+    value: '',
     description: '',
-    currencySelected: 'USD',
-    paymentMethodSelected: 'Dinheiro',
-    expenseCategorySelected: 'Alimentação',
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Alimentação',
     exchangeRates: {},
   };
 
@@ -28,6 +28,10 @@ class WalletForm extends Component {
       exchangeRates: currencies,
     });
     dispatch(actionAddExpense(this.state));
+    this.setState({
+      value: '',
+      description: '',
+    });
   };
 
   handleChange = ({ target: { name, value } }) => {
@@ -38,11 +42,11 @@ class WalletForm extends Component {
 
   render() {
     const {
-      valorDaDespesa,
+      value,
       description,
-      currencySelected,
-      paymentMethodSelected,
-      expenseCategorySelected,
+      currency,
+      method,
+      tag,
     } = this.state;
 
     const { currencies } = this.props;
@@ -51,9 +55,9 @@ class WalletForm extends Component {
       <section className="container-fluid">
         <div className="row justify-content-center align-items-center">
           <input
-            type="text"
-            name="valorDaDespesa"
-            value={ valorDaDespesa }
+            type="number"
+            name="value"
+            value={ value }
             placeholder="Valor da despesa"
             className="form-control my-2"
             onChange={ this.handleChange }
@@ -70,19 +74,19 @@ class WalletForm extends Component {
           />
           <select
             className="form-select my-2"
-            name="currencySelected"
-            value={ currencySelected }
+            name="currency"
+            value={ currency }
             onChange={ this.handleChange }
             data-testid="currency-input"
           >
-            {currencies.map((currency, index) => (
-              <option key={ index } value={ currency }>{currency}</option>
+            {currencies.map((element, index) => (
+              <option key={ index } value={ element }>{element}</option>
             ))}
           </select>
           <select
             className="form-select my-2"
-            name="paymentMethodSelected"
-            value={ paymentMethodSelected }
+            name="method"
+            value={ method }
             onChange={ this.handleChange }
             data-testid="method-input"
           >
@@ -92,8 +96,8 @@ class WalletForm extends Component {
           </select>
           <select
             className="form-select my-2"
-            name="expenseCategorySelected"
-            value={ expenseCategorySelected }
+            name="tag"
+            value={ tag }
             onChange={ this.handleChange }
             data-testid="tag-input"
           >
