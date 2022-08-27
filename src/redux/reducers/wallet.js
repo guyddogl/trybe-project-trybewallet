@@ -1,4 +1,10 @@
-import { GET_CURRENCIES, ADD_EXPENSE, DELETE_EXPENSE, EDIT_EXPENSE } from '../actions';
+import {
+  GET_CURRENCIES,
+  ADD_EXPENSE,
+  DELETE_EXPENSE,
+  EDIT_EXPENSE,
+  SET_EDITOR_FALSE,
+} from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -30,6 +36,11 @@ const wallet = (state = INITIAL_STATE, action) => {
       ...state,
       editor: true,
       idToEdit: action.payload,
+    };
+  case SET_EDITOR_FALSE:
+    return {
+      ...state,
+      editor: false,
     };
   default:
     return state;
