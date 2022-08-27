@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actionSaveUser } from '../redux/actions';
-import wallet from '../assets/img/wallet.png';
+import wallet from '../assets/img/logo-trybewallet.png';
 
 class Login extends React.Component {
   state = {
@@ -45,9 +45,9 @@ class Login extends React.Component {
           >
             <img
               src={ wallet }
-              className="img-fluid mx-auto d-block"
+              className="img-fluid mx-auto d-block mb-4"
               alt="Trybewallet"
-              style={ { maxWidth: '80px' } }
+              style={ { maxWidth: '180px' } }
             />
             <input
               type="email"
