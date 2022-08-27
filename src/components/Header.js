@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import wallet from '../assets/img/logo-trybewallet.png';
 
 class Header extends Component {
   sumExpensesValues = ({ expenses } = this.props) => {
@@ -16,11 +17,33 @@ class Header extends Component {
   render() {
     const { email } = this.props;
     return (
-      <div>
-        <p data-testid="email-field">{email}</p>
-        <p data-testid="total-field">{this.sumExpensesValues()}</p>
-        <p data-testid="header-currency-field">BRL</p>
-      </div>
+      <header className="container-fluid shadow-sm" style={ { background: '#ffffff' } }>
+        <section className="row justify-content-around align-items-center">
+          <div className="col-3 col-lg-2 text-center">
+            <img
+              src={ wallet }
+              className="img-fluid"
+              alt="Trybewallet"
+              style={ { maxWidth: '180px' } }
+            />
+          </div>
+          <div className="col-3 col-lg-2 text-start">
+            <p className="mt-3">
+              <i
+                className="fa-solid fa-circle-user fa-xl me-2"
+                style={ { color: '#2fc18c' } }
+              />
+              <span data-testid="email-field">{email}</span>
+            </p>
+            <p>
+              Total: &nbsp;
+              <span data-testid="total-field">{this.sumExpensesValues()}</span>
+              &nbsp;
+              <span data-testid="header-currency-field">BRL</span>
+            </p>
+          </div>
+        </section>
+      </header>
     );
   }
 }
