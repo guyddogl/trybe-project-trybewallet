@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { saveUser } from '../redux/actions';
+import { actionSaveUser } from '../redux/actions';
 import wallet from '../assets/img/wallet.png';
 
 class Login extends React.Component {
@@ -28,7 +28,7 @@ class Login extends React.Component {
     event.preventDefault();
     const { dispatch } = this.props;
     const { email } = this.state;
-    dispatch(saveUser(email));
+    dispatch(actionSaveUser(email));
     const { history } = this.props;
     history.push('/carteira');
   };
