@@ -24,8 +24,7 @@ const wallet = (state = INITIAL_STATE, action) => {
   case DELETE_EXPENSE: return { ...state, expenses: [...action.payload], editor: false };
   case EDIT_EXPENSE: return { ...state, editor: true, idToEdit: action.payload };
   case SET_EDITOR_FALSE: return { ...state, editor: false };
-  default:
-    return state;
+  default: return state;
   }
 };
 
