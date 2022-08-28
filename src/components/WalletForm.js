@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrenciesThunk, actionAddExpense } from '../redux/actions';
+import {
+  getCurrenciesThunk,
+  actionAddExpense,
+  actionDeleteExpense,
+  actionSetEditorFalse,
+} from '../redux/actions';
 import getCurrencies from '../services';
 
 class WalletForm extends Component {
@@ -20,24 +25,65 @@ class WalletForm extends Component {
     dispatch(getCurrenciesThunk());
   }
 
+  componentDidUpdate(prevValue) {
+    const { editor } = this.props;
+    if (editor !== prevValue.editor) { this.handleEditExpense(); }
+  }
+
+  handleEditExpense = () => {
+    const { idToEdit, expenses, editor } = this.props;
+    if (editor) {
+      const selectedExpense = expenses.find((e) => e.id === idToEdit);
+      this.setState({
+        ...selectedExpense });
+    } else {
+      this.setState({
+        id: 0,
+        value: '',
+        currency: 'USD',
+        method: 'Dinheiro',
+        tag: 'Alimentação',
+        description: '',
+        exchangeRates: {},
+      });
+    }
+  };
+
   handleSaveExpense = async () => {
     const currencies = await getCurrencies();
-    const { dispatch, idExpense } = this.props;
-    this.setState({
-      id: idExpense.length > 0 ? idExpense.length : 0,
-      exchangeRates: currencies,
-    });
-    dispatch(actionAddExpense(this.state));
-    this.setState({
-      value: '',
-      description: '',
-    });
+    const { dispatch, idExpense, editor, expenses, idToEdit } = this.props;
+    if (editor) {
+      // https://stackoverflow.com/questions/49491393/using-spread-operator-to-update-an-object-value
+      const editExpense = expenses
+        .map((expense) => (expense.id === idToEdit
+          ? { ...expense, ...this.state } : { ...expense }));
+      dispatch(actionDeleteExpense(editExpense));
+      this.setState({
+        value: '',
+        description: '',
+      });
+    } else {
+      this.setState({
+        id: idExpense.length > 0 ? idExpense.length : 0,
+        exchangeRates: currencies,
+      });
+      dispatch(actionAddExpense(this.state));
+      this.setState({
+        value: '',
+        description: '',
+      });
+    }
   };
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({
       [name]: value,
     });
+  };
+
+  handleEditCancel = () => {
+    const { dispatch } = this.props;
+    dispatch(actionSetEditorFalse());
   };
 
   render() {
@@ -49,7 +95,7 @@ class WalletForm extends Component {
       tag,
     } = this.state;
 
-    const { currencies } = this.props;
+    const { currencies, editor } = this.props;
 
     return (
       <section className="container my-5">
@@ -78,7 +124,7 @@ class WalletForm extends Component {
               data-testid="description-input"
             />
           </label>
-          <label htmlFor="currency" className="col-4 col-lg-2 form-label my-2">
+          <label htmlFor="currency" className="col-4 col-lg-1 form-label my-2">
             Moeda
             <select
               className="form-select"
@@ -122,14 +168,33 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <div className="col-6 col-lg-2 text-center">
-            <button
-              type="button"
-              className="btn btn-md btn-primary mt-4"
-              onClick={ this.handleSaveExpense }
-            >
-              Adicionar despesa
-            </button>
+          <div className="col-6 col-lg-3" style={ { maxWidth: '260px' } }>
+            {editor ? (
+              <>
+                <button
+                  type="button"
+                  className="btn btn-md btn-primary mt-4 me-3"
+                  onClick={ this.handleSaveExpense }
+                >
+                  Editar Despesa
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-md btn-secondary mt-4"
+                  onClick={ this.handleEditCancel }
+                >
+                  Cancelar
+                </button>
+              </>)
+              : (
+                <button
+                  type="button"
+                  className="btn btn-md btn-success mt-4"
+                  onClick={ this.handleSaveExpense }
+                >
+                  Adicionar despesa
+                </button>)}
+
           </div>
         </div>
       </section>
@@ -140,12 +205,18 @@ class WalletForm extends Component {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   idExpense: state.wallet.expenses,
+  editor: state.wallet.editor,
+  expenses: state.wallet.expenses,
+  idToEdit: state.wallet.idToEdit,
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   idExpense: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
   dispatch: PropTypes.func.isRequired,
+  editor: PropTypes.bool.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
+  idToEdit: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);
