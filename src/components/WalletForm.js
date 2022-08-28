@@ -30,27 +30,6 @@ class WalletForm extends Component {
     if (editor !== prevValue.editor) { this.handleEditExpense(); }
   }
 
-  showNotification = (type, message) => {
-    toastr.options = {
-      closeButton: false,
-      debug: false,
-      newestOnTop: false,
-      progressBar: false,
-      positionClass: 'toast-top-center',
-      preventDuplicates: false,
-      onclick: null,
-      showDuration: '300',
-      hideDuration: '1000',
-      timeOut: '3000',
-      extendedTimeOut: '1000',
-      showEasing: 'swing',
-      hideEasing: 'linear',
-      showMethod: 'fadeIn',
-      hideMethod: 'fadeOut',
-    };
-    toastr[type](message);
-  };
-
   handleEditExpense = () => {
     const { idToEdit, expenses, editor } = this.props;
     if (editor) {
@@ -83,7 +62,6 @@ class WalletForm extends Component {
         value: '',
         description: '',
       });
-      this.showNotification('info', 'Despesa alterada');
     } else {
       this.setState({
         id: idExpense.length > 0 ? idExpense.length : 0,
@@ -94,7 +72,6 @@ class WalletForm extends Component {
         value: '',
         description: '',
       });
-      this.showNotification('success', 'Despesa adicionada');
     }
   };
 

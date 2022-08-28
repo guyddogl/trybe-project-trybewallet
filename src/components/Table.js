@@ -4,32 +4,10 @@ import { connect } from 'react-redux';
 import { actionDeleteExpense, actionEditExpense } from '../redux/actions';
 
 class Table extends Component {
-  showNotification = (type, message) => {
-    toastr.options = {
-      closeButton: false,
-      debug: false,
-      newestOnTop: false,
-      progressBar: false,
-      positionClass: 'toast-top-center',
-      preventDuplicates: false,
-      onclick: null,
-      showDuration: '300',
-      hideDuration: '1000',
-      timeOut: '3000',
-      extendedTimeOut: '1000',
-      showEasing: 'swing',
-      hideEasing: 'linear',
-      showMethod: 'fadeIn',
-      hideMethod: 'fadeOut',
-    };
-    toastr[type](message);
-  };
-
   deleteExpense = ({ target }) => {
     const { expenses, dispatch } = this.props;
     const filterExpense = expenses.filter((expense) => expense.id !== Number(target.id));
     dispatch(actionDeleteExpense(filterExpense));
-    this.showNotification('warning', 'Despesa excluída');
   };
 
   editExpense = ({ target }) => {
