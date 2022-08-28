@@ -20,28 +20,10 @@ const wallet = (state = INITIAL_STATE, action) => {
       ...state,
       currencies: Object.keys(action.payload).filter((currency) => currency !== 'USDT'),
     };
-  case ADD_EXPENSE:
-    return {
-      ...state,
-      expenses: [...state.expenses, action.payload],
-    };
-  case DELETE_EXPENSE:
-    return {
-      ...state,
-      expenses: [...action.payload],
-      editor: false,
-    };
-  case EDIT_EXPENSE:
-    return {
-      ...state,
-      editor: true,
-      idToEdit: action.payload,
-    };
-  case SET_EDITOR_FALSE:
-    return {
-      ...state,
-      editor: false,
-    };
+  case ADD_EXPENSE: return { ...state, expenses: [...state.expenses, action.payload] };
+  case DELETE_EXPENSE: return { ...state, expenses: [...action.payload], editor: false };
+  case EDIT_EXPENSE: return { ...state, editor: true, idToEdit: action.payload };
+  case SET_EDITOR_FALSE: return { ...state, editor: false };
   default:
     return state;
   }
