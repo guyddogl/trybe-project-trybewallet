@@ -17,18 +17,22 @@ describe('Testa se a página de login renderiza corretamente', () => {
   test('Verifica se a rota está correta', () => {
     expect(pathname).toBe('/');
   });
+
   test('Verifica se o input e-mail existe', () => {
     const inputEmail = screen.getByTestId(EMAIL_INPUT_TEST_ID);
     expect(inputEmail).toBeInTheDocument();
   });
+
   test('Verifica se o input password existe', () => {
     const inputPassword = screen.getByTestId(PASSWORD_INPUT_TEST_ID);
     expect(inputPassword).toBeInTheDocument();
   });
+
   test('Verifica se o botão Entrar existe', () => {
     const buttonEntrar = screen.getByText('Entrar');
     expect(buttonEntrar).toBeInTheDocument();
   });
+
   test('Verifica se os inputs são validados', () => {
     const inputEmail = screen.getByTestId(EMAIL_INPUT_TEST_ID);
     const inputPassword = screen.getByTestId(PASSWORD_INPUT_TEST_ID);
@@ -40,6 +44,7 @@ describe('Testa se a página de login renderiza corretamente', () => {
     userEvent.type(inputPassword, '123456');
     expect(buttonEntrar).not.toHaveAttribute('disabled');
   });
+
   test('Verifica se ao entrar a rota está correta', () => {
     const inputEmail = screen.getByTestId(EMAIL_INPUT_TEST_ID);
     const inputPassword = screen.getByTestId(PASSWORD_INPUT_TEST_ID);
@@ -47,6 +52,6 @@ describe('Testa se a página de login renderiza corretamente', () => {
     userEvent.type(inputPassword, '123456');
     const buttonEntrar = screen.getByText('Entrar');
     userEvent.click(buttonEntrar);
-    expect(pathname).toBe('/');
+    expect(pathname).toBe('/'); // Falso positivo, buscar orientação
   });
 });
