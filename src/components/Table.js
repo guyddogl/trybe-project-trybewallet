@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
 import { actionDeleteExpense, actionEditExpense } from '../redux/actions';
 
 class Table extends Component {
@@ -44,7 +42,7 @@ class Table extends Component {
     return (
       <div className="table-responsive">
         <table
-          className="table table-sm table-hover table-bordered align-middle"
+          className="table table-hover table-bordered align-middle"
           style={ { background: 'white' } }
         >
           <thead className="table-success text-center">
