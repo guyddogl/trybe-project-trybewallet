@@ -9,10 +9,8 @@ class Wallet extends React.Component {
       <>
         <Header />
         <WalletForm />
-        <section className="container">
-          <div className="row justify-content-center align-items-center">
-            <Table />
-          </div>
+        <section className="container-fluid" style={ { maxWidth: '1500px' } }>
+          <Table />
         </section>
       </>
     );
