@@ -1,9 +1,9 @@
 const URL_API = 'https://economia.awesomeapi.com.br/json/all';
 
-async function getCurrencies() {
+const getCurrencies = async () => {
   const response = await fetch(URL_API);
-  const currency = await response.json();
-  return currency;
-}
+  const currencies = await response.json();
+  return currencies;
+};
 
 export default getCurrencies;

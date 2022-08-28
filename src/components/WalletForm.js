@@ -20,23 +20,16 @@ class WalletForm extends Component {
     exchangeRates: {},
   };
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(getCurrenciesThunk());
-  }
+  componentDidMount({ dispatch } = this.props) { dispatch(getCurrenciesThunk()); }
 
-  componentDidUpdate(prevValue) {
+  componentDidUpdate(prevValue) { // https://stackoverflow.com/questions/52393172/comparing-prevprops-in-componentdidupdate
     const { editor } = this.props;
-    if (editor !== prevValue.editor) { this.handleEditExpense(); }
+    if (editor !== prevValue.editor) this.handleEditExpense();
   }
 
-  handleEditExpense = () => {
-    const { idToEdit, expenses, editor } = this.props;
-    if (editor) {
-      const selectedExpense = expenses.find((e) => e.id === idToEdit);
-      this.setState({
-        ...selectedExpense });
-    } else {
+  handleEditExpense = ({ editor, expenses, idToEdit } = this.props) => {
+    if (editor) this.setState({ ...expenses.find((e) => e.id === idToEdit) });
+    else {
       this.setState({
         id: 0,
         value: '',
@@ -50,41 +43,28 @@ class WalletForm extends Component {
   };
 
   handleSaveExpense = async () => {
+    const { dispatch, editor, expenses, idToEdit } = this.props;
     const currencies = await getCurrencies();
-    const { dispatch, idExpense, editor, expenses, idToEdit } = this.props;
     if (editor) {
       // https://stackoverflow.com/questions/49491393/using-spread-operator-to-update-an-object-value
       const editExpense = expenses
         .map((expense) => (expense.id === idToEdit
           ? { ...expense, ...this.state } : { ...expense }));
       dispatch(actionDeleteExpense(editExpense));
-      this.setState({
-        value: '',
-        description: '',
-      });
+      this.setState({ value: '', description: '' });
     } else {
       this.setState({
-        id: idExpense.length > 0 ? idExpense.length : 0,
+        id: expenses.length > 0 ? expenses.length : 0,
         exchangeRates: currencies,
       });
       dispatch(actionAddExpense(this.state));
-      this.setState({
-        value: '',
-        description: '',
-      });
+      this.setState({ value: '', description: '' });
     }
   };
 
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({
-      [name]: value,
-    });
-  };
+  handleChange = ({ target: { name, value } }) => { this.setState({ [name]: value }); };
 
-  handleEditCancel = () => {
-    const { dispatch } = this.props;
-    dispatch(actionSetEditorFalse());
-  };
+  handleEditCancel = ({ dispatch } = this.props) => { dispatch(actionSetEditorFalse()); };
 
   render() {
     const {
@@ -204,18 +184,16 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
-  idExpense: state.wallet.expenses,
-  editor: state.wallet.editor,
   expenses: state.wallet.expenses,
+  editor: state.wallet.editor,
   idToEdit: state.wallet.idToEdit,
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  idExpense: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
   dispatch: PropTypes.func.isRequired,
   editor: PropTypes.bool.isRequired,
-  expenses: PropTypes.arrayOf(PropTypes.shape({ }).isRequired).isRequired,
   idToEdit: PropTypes.number.isRequired,
 };
 
