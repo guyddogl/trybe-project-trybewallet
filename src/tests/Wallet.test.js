@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouterAndRedux from './helpers/renderWith';
 import Wallet from '../pages/Wallet';
@@ -69,8 +69,7 @@ const CURRENCY_FIELD_TEST_ID = 'header-currency-field';
 const BUTTON_EDIT_TEST_ID = 'edit-btn';
 const BUTTON_DELETE_TEST_ID = 'delete-btn';
 const BUTTON_ADD_TEST_ID = 'Adicionar despesa';
-const BUTTON_SAVE_EDIT_TEST_ID = 'Editar';
-// const CURRENCY_SELECT_TEST_ID = 'currency-input';
+const BUTTON_SAVE_EDIT = 'Editar despesa';
 
 afterEach(() => jest.clearAllMocks());
 
@@ -99,22 +98,11 @@ describe('Testa a page Wallet', () => {
     const inputDescription = screen.getByTestId(DESCRIPTION_INPUT_TEST_ID);
     const buttonADD = screen.getByRole('button', { name: BUTTON_ADD_TEST_ID });
     userEvent.type(inputValor, '77');
-    userEvent.type(inputDescription, 'Descrição a despesa');
+    userEvent.type(inputDescription, 'Minha despesa');
     userEvent.click(buttonADD);
     expect(inputValor.innerHTML).toBe('');
     expect(inputDescription.innerHTML).toBe('');
   });
-
-  // Como testar os Selects????
-  // test('Verificar os Selects', () => {
-  //   renderWithRouterAndRedux(<Wallet />);
-  //   const currencySelect = screen.getByTestId(CURRENCY_SELECT_TEST_ID);
-  //   const methodSelect = screen.getByTestId('method-input');
-  //   const categorySelect = screen.getByTestId('tag-input');
-  //   expect(currencySelect).toBe('USD');
-  //   expect(methodSelect).toBe('Dinheiro');
-  //   expect(categorySelect).toBe('Alimentação');
-  // });
 
   test('Verifica se ao clicar no botão excluir a despesa é excluída', () => {
     const { store } = renderWithRouterAndRedux(<Wallet />, { initialState: STATE });
@@ -136,15 +124,49 @@ describe('Testa a page Wallet', () => {
   });
 
   test('Verifica se ao clicar no botão editar a despesa é editada', () => {
-    renderWithRouterAndRedux(<Wallet />, { initialState: STATE });
+    const { store } = renderWithRouterAndRedux(<Wallet />, { initialState: STATE });
     const buttonEdit = screen.getAllByTestId(BUTTON_EDIT_TEST_ID);
-    userEvent.click(buttonEdit[2]);
+    userEvent.click(buttonEdit[0]);
+    const buttonSaveEdit = screen.getAllByRole('button', { name: BUTTON_SAVE_EDIT })[0];
     const inputValor = screen.getByTestId(VALUE_INPUT_TEST_ID);
     const inputDescription = screen.getByTestId(DESCRIPTION_INPUT_TEST_ID);
-    const buttonSaveEdit = screen.getByRole('button', { name: BUTTON_SAVE_EDIT_TEST_ID });
+    userEvent.type(inputValor, '77');
+    userEvent.type(inputDescription, 'Descreva despesa');
+    userEvent.click(buttonSaveEdit);
+    const expense = [
+      {
+        id: 0,
+        value: '77',
+        currency: 'USD',
+        method: 'Dinheiro',
+        tag: 'Saúde',
+        description: 'Descreva despesa',
+        exchangeRates: mockCurrencies,
+      },
+    ];
+    waitFor(() => expect(store.getState().wallet.expenses[0]).toEqual(expense[0]));
+  });
+
+  test('Verifica se ao adicionar a despesa ela existe no state', async () => {
+    const { store } = renderWithRouterAndRedux(<Wallet />, { initialState: STATE });
+    const inputValor = screen.getByTestId(VALUE_INPUT_TEST_ID);
+    const inputDescription = screen.getByTestId(DESCRIPTION_INPUT_TEST_ID);
+    const buttonADD = screen.getByRole('button', { name: BUTTON_ADD_TEST_ID });
     userEvent.type(inputValor, '77');
     userEvent.type(inputDescription, 'Descrição a despesa');
-    userEvent.click(buttonSaveEdit);
+    userEvent.click(buttonADD);
+    const expense = [
+      {
+        id: 3,
+        value: '77',
+        currency: 'USD',
+        method: 'Dinheiro',
+        tag: 'Alimentação',
+        description: 'Descrição a despesa',
+        exchangeRates: mockCurrencies,
+      },
+    ];
+    await waitFor(() => expect(store.getState().wallet.expenses[3]).toEqual(expense[0]));
   });
 
   const EDITOR_TRUE = {
