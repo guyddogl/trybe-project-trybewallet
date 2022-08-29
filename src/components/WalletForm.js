@@ -44,7 +44,6 @@ class WalletForm extends Component {
 
   handleSaveExpense = async () => {
     const { dispatch, editor, expenses, idToEdit } = this.props;
-    const currencies = await getCurrencies();
     if (editor) {
       // https://stackoverflow.com/questions/49491393/using-spread-operator-to-update-an-object-value
       const editExpense = expenses
@@ -53,6 +52,7 @@ class WalletForm extends Component {
       dispatch(actionDeleteExpense(editExpense));
       this.setState({ value: '', description: '' });
     } else {
+      const currencies = await getCurrencies();
       this.setState({
         id: expenses.length > 0 ? expenses.length : 0,
         exchangeRates: currencies,
@@ -158,8 +158,9 @@ class WalletForm extends Component {
                   type="button"
                   className="btn btn-md btn-primary mt-4 me-3"
                   onClick={ this.handleSaveExpense }
+                  data-testid="btn-save-edit"
                 >
-                  Editar
+                  Editar despesa
                 </button>
                 <button
                   type="button"
