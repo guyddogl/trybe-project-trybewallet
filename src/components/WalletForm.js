@@ -64,7 +64,10 @@ class WalletForm extends Component {
 
   handleChange = ({ target: { name, value } }) => { this.setState({ [name]: value }); };
 
-  handleEditCancel = ({ dispatch } = this.props) => { dispatch(actionSetEditorFalse()); };
+  handleEditCancel = () => {
+    const { dispatch } = this.props;
+    dispatch(actionSetEditorFalse());
+  };
 
   render() {
     const {
@@ -156,7 +159,7 @@ class WalletForm extends Component {
                   className="btn btn-md btn-primary mt-4 me-3"
                   onClick={ this.handleSaveExpense }
                 >
-                  Editar Despesa
+                  Editar
                 </button>
                 <button
                   type="button"
