@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 import {
   getCurrenciesThunk,
   actionAddExpense,
@@ -27,6 +29,27 @@ class WalletForm extends Component {
     if (editor !== prevValue.editor) this.handleEditExpense();
   }
 
+  showNotification = (type, message) => {
+    toastr.options = {
+      closeButton: false,
+      debug: false,
+      newestOnTop: false,
+      progressBar: false,
+      positionClass: 'toast-top-center',
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: '300',
+      hideDuration: '1000',
+      timeOut: '3000',
+      extendedTimeOut: '1000',
+      showEasing: 'swing',
+      hideEasing: 'linear',
+      showMethod: 'fadeIn',
+      hideMethod: 'fadeOut',
+    };
+    toastr[type](message);
+  };
+
   handleEditExpense = ({ editor, expenses, idToEdit } = this.props) => {
     if (editor) this.setState({ ...expenses.find((e) => e.id === idToEdit) });
     else {
@@ -51,6 +74,7 @@ class WalletForm extends Component {
           ? { ...expense, ...this.state } : { ...expense }));
       dispatch(actionDeleteExpense(editExpense));
       this.setState({ value: '', description: '' });
+      this.showNotification('info', 'Despesa alterada');
     } else {
       const currencies = await getCurrencies();
       this.setState({
@@ -59,6 +83,7 @@ class WalletForm extends Component {
       });
       dispatch(actionAddExpense(this.state));
       this.setState({ value: '', description: '' });
+      this.showNotification('success', 'Despesa adicionada');
     }
   };
 
@@ -151,22 +176,24 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <div className="col-6 col-lg-3" style={ { maxWidth: '260px' } }>
+          <div className="col-6 col-lg-3" style={ { maxWidth: '290px' } }>
             {editor ? (
               <>
                 <button
                   type="button"
                   className="btn btn-md btn-primary mt-4 me-3"
                   onClick={ this.handleSaveExpense }
-                  data-testid="btn-save-edit"
                 >
-                  Editar despesa
+                  <i className="fa-regular fa-floppy-disk me-1" />
+                  {' '}
+                  Salvar Edição
                 </button>
                 <button
                   type="button"
                   className="btn btn-md btn-secondary mt-4"
                   onClick={ this.handleEditCancel }
                 >
+                  <i className="fa-solid fa-rotate-left me-1" />
                   Cancelar
                 </button>
               </>)
@@ -176,6 +203,8 @@ class WalletForm extends Component {
                   className="btn btn-md btn-success mt-4"
                   onClick={ this.handleSaveExpense }
                 >
+                  <i className="fa-solid fa-circle-plus me-1" />
+                  {' '}
                   Adicionar despesa
                 </button>)}
 

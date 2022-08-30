@@ -1,13 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 import { actionDeleteExpense, actionEditExpense } from '../redux/actions';
 
 class Table extends Component {
+  showNotification = (type, message) => {
+    toastr.options = {
+      closeButton: false,
+      debug: false,
+      newestOnTop: false,
+      progressBar: false,
+      positionClass: 'toast-top-center',
+      preventDuplicates: false,
+      onclick: null,
+      showDuration: '300',
+      hideDuration: '1000',
+      timeOut: '3000',
+      extendedTimeOut: '1000',
+      showEasing: 'swing',
+      hideEasing: 'linear',
+      showMethod: 'fadeIn',
+      hideMethod: 'fadeOut',
+    };
+    toastr[type](message);
+  };
+
   deleteExpense = ({ target }) => {
     const { expenses, dispatch } = this.props;
     const filterExpense = expenses.filter((expense) => expense.id !== Number(target.id));
     dispatch(actionDeleteExpense(filterExpense));
+    this.showNotification('warning', 'Despesa excluída');
   };
 
   editExpense = ({ target }) => {
@@ -58,7 +82,7 @@ class Table extends Component {
                       onClick={ this.editExpense }
                     >
                       <i className="fa-regular fa-edit me-2" />
-                      Editar despesa
+                      Editar
                     </button>
                     <button
                       type="button"
